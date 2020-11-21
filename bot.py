@@ -1,19 +1,17 @@
 import discord
-from discord.ext import commands
 
-client = commands.Bot(command_prefix = "!")
+client = discord.Client()
 
 @client.event
 async def on_ready():
-    print("Bot is ready")
+    print('We have logged in as {0.user}'.format(client))
 
 @client.event
-async def on_member_join(member):
-    print(f"{member} has joined the server!")
+async def on_message(message):
+    if message.author == client.user:
+        return
 
-@client.event
-async def on_member_remove(member):
-    print(f"{member} has ;eft the server")
+    if message.content.startswith('$hello'):
+        await message.channel.send('Hello!')
 
-
-client.run("Nzc3MDM4NTA3ODM0MzQzNDQ1.X69ngA.rG-9rnDMFK2kEMgcnfh0HKzReA8")
+client.run('Nzc3MDM4NTA3ODM0MzQzNDQ1.X69ngA.rG-9rnDMFK2kEMgcnfh0HKzReA8')
