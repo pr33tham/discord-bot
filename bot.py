@@ -22,7 +22,10 @@ async def clear(ctx,amount=2):
 @client.command(aliases=['k'])
 @commands.has_permissions(kick_members = True)
 async def kick(ctx,member : discord.Member,*,reason = 'No reason provided'):
-    await member.send("you have been kicked from because :" + reason) 
+    try:
+        await member.send("you have been kicked from because :" + reason) 
+    except:
+        await ctx.send("Member has their dms closed!")    
     await member.kick(reason=reason)
 
 @client.command(aliases=['m'])
@@ -30,19 +33,24 @@ async def kick(ctx,member : discord.Member,*,reason = 'No reason provided'):
 async def mute(ctx,member:discord.Member):
     muted_role = ctx.guild.get_role(783318763063607337)
     await member.add_roles(muted_role)
-    await ctx.send(member.mention + ' has been muted')
+    await ctx.send(member.display_name + ' has been muted')
+    await member.send("You have been muted from the server")
 
 @client.command(aliases=['um'])
 @commands.has_permissions(kick_members=True)
 async def ummute(ctx,member:discord.Member):
-    muted_role = ctx.guild.get_role()
+    muted_role = ctx.guild.get_role() #create a mute role with respected properties like unable to send messages, copy id and paste in parenthisis -> ()
     await member.remove_roles(muted_role)
-    await ctx.send(member.mention + ' has been unmuted')
+    await ctx.send(member.display_name + ' has been unmuted')
+    await member.send("You have been unmuted by moderators!, Do not repeat this, or you will be banned permanently!")
 
 @client.command(aliases=['b'])
 @commands.has_permissions(ban_members = True)
 async def ban(ctx,member : discord.Member,*,reason = 'No reason provided'):
-    await ctx.send(member.display_name +" you have been banned from server because : " + reason) 
+    try:
+        await member.send(member.display_name +",you have been banned from server because " + reason) 
+    except:
+        await ctx.send(member.display_name+" has their dms private, the bot did not send any information to this user!")
     await member.ban(reason=reason)
 
 @client.command(aliases=['ub'])
@@ -58,4 +66,4 @@ async def unban(ctx,*,member):
             return
         
     await ctx.send(member +'was not found')
-client.run()     
+client.run('Your Token')     
